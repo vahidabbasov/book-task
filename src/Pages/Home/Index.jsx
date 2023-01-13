@@ -4,6 +4,7 @@ import styled from "styled-components";
 import "./Index.css";
 import Modal from '../../Components/Modal/İndex'
 import {BsSearch} from 'react-icons/bs'
+import { getData } from "../../Service/getData";
 const Wrapper = styled.div`
   background-image: url(https://dadabooksearch.netlify.app/images/headerbg.jpg);
   background-color: rgb(204, 204, 204);
@@ -114,7 +115,7 @@ function Index() {
   }, []);
 
   const searchBook=()=>{
-    axios.get(`https://www.googleapis.com/books/v1/volumes?q=${search}&maxResults=30`).then((res)=>setBooks(res.data.items))
+    getData(search).then((res)=>setBooks(res.data.items))
   }
   return (
     <>
