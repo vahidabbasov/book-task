@@ -2,8 +2,8 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import "./Index.css";
-import Modal from '../../Components/Modal/İndex'
-import {BsSearch} from 'react-icons/bs'
+import Modal from "../../Components/Modal/İndex";
+import { BsSearch } from "react-icons/bs";
 import { getData } from "../../Service/getData";
 const Wrapper = styled.div`
   background-image: url(https://dadabooksearch.netlify.app/images/headerbg.jpg);
@@ -46,11 +46,11 @@ const Input = styled.input`
     rgb(255 255 255 / 90%) 0px 3px 7px -3px; ;
 `;
 const InputIcon = styled.span`
-    position: absolute;
-    font-size: 20px;
-    top: 14px;
-    right: 8px;
-`
+  position: absolute;
+  font-size: 20px;
+  top: 14px;
+  right: 8px;
+`;
 
 const HomeWrapper = styled.div`
   width: 98%;
@@ -94,18 +94,31 @@ const Author = styled.h6`
   opacity: 0.7;
 `;
 
+const TextWrapper = styled.div`
+  width: 98%;
+  margin: 20px auto auto;
+  min-height: 55vh;
+  display: flex;
+  justify-content: center;
+`;
+const Text = styled.div`
+  margin: 80px 0px 40px;
+  font-size: 45px;
+  font-weight: 800;
+`;
+
 function Index() {
   let [show, setShow] = useState(false);
   let [books, setBooks] = useState([]);
   let [search, setSearch] = useState("");
-  const [bookDetail, setBookDetail] = useState()
+  const [bookDetail, setBookDetail] = useState();
 
   const open = () => {
     setShow(!show);
   };
-  const close =()=>{
-    setShow(false)
-  }
+  const close = () => {
+    setShow(false);
+  };
   useEffect(() => {
     axios
       .get(`https://www.googleapis.com/books/v1/volumes?q=${search}`)
@@ -114,9 +127,9 @@ function Index() {
       });
   }, []);
 
-  const searchBook=()=>{
-    getData(search).then((res)=>setBooks(res.data.items))
-  }
+  const searchBook = () => {
+    getData(search).then((res) => setBooks(res.data.items));
+  };
   return (
     <>
       <Wrapper>
@@ -125,69 +138,96 @@ function Index() {
             Abbasov's <br /> Book Searching App
           </Title>
           <Search>
-            <form onSubmit={(e)=>{
-                e.preventDefault()
-                searchBook()
-            }}>
-            <Input placeholder="Find book" type='text' value={search} onChange={(e)=>setSearch(e.target.value)
-              } ></Input>
-              <InputIcon onClick={searchBook}><BsSearch/></InputIcon>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                searchBook();
+              }}
+            >
+              <Input
+                placeholder="Find book"
+                type="text"
+                value={search}
+                onChange={(e) => 
+                  
+                  setSearch(e.target.value)}
+              ></Input>
+              <InputIcon onClick={searchBook}>
+                <BsSearch />
+              </InputIcon>
             </form>
-              
           </Search>
         </ContentWrapper>
       </Wrapper>
-
-{
-    <div style={{display:'flex', flexWrap:'wrap', marginLeft:"auto", marginRight:'auto'}}>
-{books.map((book, index) => {
-        return (
-          <>
-            <Card>
-              <Img src={`${book.volumeInfo?.imageLinks?.thumbnail}`}></Img>
-              <Name>{book.volumeInfo.title}</Name>
-              <Author>{book.volumeInfo.publisher}</Author>
-              <div className="btns">
-                <a
-                  href={`${book.volumeInfo.previewLink}`}
-                  style={{
-                    textDecoration: "none",
-                    color: "rgb(120, 120, 120)",
-                    margin: "10px",
-                    fontSize: "16px",
-                    curson: "pointer",
-                  }}
-                >
-                  Preview
-                </a>
-                <button
-                show={show}
-                setShow={setShow}
-                  onClick={()=>{
-                    setShow(true);setBookDetail(book)
-                  }}
-                  style={{
-                    textDecoration: "none",
-                    color: "rgb(120, 120, 120)",
-                    margin: "10px",
-                    fontSize: "16px",
-                    curson: "pointer",
-                    backgroundColor: "transparent",
-                    border: "none",
-                    cursor: "pointer",
-                  }}
-                >
-                  Details
-                </button>
-              </div>
-            </Card>
-          </>
-        );
-    })}
-    <Modal show={show} book={bookDetail} close={close}/>
-    </div>
-}
+      {
+        books.length===0 && <TextWrapper>
+        <Text>
+          <div>
+            Nothing <br />
+            To <br /> Show!?
+          </div>
+        </Text>
+      </TextWrapper>
+      }
       
+
+      {
+        <div
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            marginLeft: "auto",
+            marginRight: "auto",
+          }}
+        >
+          {books.map((book, index) => {
+            return (
+              <>
+                <Card>
+                  <Img src={`${book.volumeInfo?.imageLinks?.thumbnail}`}></Img>
+                  <Name>{book.volumeInfo.title}</Name>
+                  <Author>{book.volumeInfo.publisher}</Author>
+                  <div className="btns">
+                    <a
+                      href={`${book.volumeInfo.previewLink}`}
+                      style={{
+                        textDecoration: "none",
+                        color: "rgb(120, 120, 120)",
+                        margin: "10px",
+                        fontSize: "16px",
+                        curson: "pointer",
+                      }}
+                    >
+                      Preview
+                    </a>
+                    <button
+                      show={show}
+                      setShow={setShow}
+                      onClick={() => {
+                        setShow(true);
+                        setBookDetail(book);
+                      }}
+                      style={{
+                        textDecoration: "none",
+                        color: "rgb(120, 120, 120)",
+                        margin: "10px",
+                        fontSize: "16px",
+                        curson: "pointer",
+                        backgroundColor: "transparent",
+                        border: "none",
+                        cursor: "pointer",
+                      }}
+                    >
+                      Details
+                    </button>
+                  </div>
+                </Card>
+              </>
+            );
+          })}
+          <Modal show={show} book={bookDetail} close={close} />
+        </div>
+      }
     </>
   );
 }
